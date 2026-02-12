@@ -1,0 +1,59 @@
+---
+import "../styles/tokens.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>fg.io</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-mono);
+    min-height: 100dvh;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      overflow: hidden;
+      height: 100dvh;
+    }
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(128, 128, 128, 0.04) 2px,
+      rgba(128, 128, 128, 0.04) 4px
+    );
+    z-index: 9999;
+  }
+
+  @media (hover: none) {
+    body::after {
+      display: none;
+    }
+  }
+</style>

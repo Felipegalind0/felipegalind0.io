@@ -1,0 +1,18 @@
+:root {
+  --bg: #050505;
+  --fg: #e0e0e0;
+  --fg-dim: #333;
+  --alert: #FF003C;
+  --cell-min: 280px;
+  --gap: 6px;
+  --radius: 2px;
+  --font-mono: "SF Mono", "Cascadia Code", "Fira Code", ui-monospace, monospace;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f5f5f5;
+    --fg: #111;
+    --fg-dim: #ccc;
+  }
+}

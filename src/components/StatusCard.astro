@@ -1,0 +1,92 @@
+---
+import { VERSION } from '../config';
+---
+
+<div class="status-card">
+  <div class="name-row">
+    <img
+      src="https://github.com/Felipegalind0.png?size=80"
+      alt=""
+      class="avatar"
+      width="40"
+      height="40"
+      loading="eager"
+    />
+    <h1 class="name">Felipe Galind0</h1>
+  </div>
+  <p class="tagline">prompt engineer, roboticist, dev</p>
+  <div class="lines">
+    <span>from minneapolis, colombian</span>
+    <span>trilingual, quad expert</span>
+    <span>licensed to fly (part 107)</span>
+    <span>studied cs at stanford</span>
+    <span>dropped out of umn</span>
+    <span>built a robot dog from scratch</span>
+    <span>built a vr museum tour for quest 2</span>
+    <span>wrote 360° image inpainting software</span>
+    <span>trained a CNN to detect rhizobia in soil</span>
+    <span>built a self-balancing robot with an esp32 cam</span>
+    <span>built an omnidirectional robot with a 360 camera</span>
+    <span>designed a 360 camera drone mount out of carbon fiber nylon</span>
+    <span class="closer">& way more i won't tell u</span>
+  </div>
+  <span class="meta">btw this page is ~4KB · {VERSION}</span>
+</div>
+
+<style>
+  .status-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+  }
+  .name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  .avatar {
+    width: clamp(1.4rem, 3vw, 2rem);
+    height: clamp(1.4rem, 3vw, 2rem);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .name {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 0;
+  }
+  .tagline {
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    opacity: 0.5;
+    margin-bottom: 1.5rem;
+  }
+  .lines {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .lines span {
+    font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+    line-height: 1.4;
+    opacity: 0.85;
+  }
+  .lines span.closer {
+    margin-top: 0.5rem;
+    opacity: 0.4;
+    font-style: italic;
+  }
+  .meta-inline {
+    margin-top: 0.5rem;
+    opacity: 0.2;
+    font-size: 0.6rem;
+  }
+  .meta {
+    margin-top: auto;
+    opacity: 0.2;
+    font-size: 0.6rem;
+  }
+</style>
