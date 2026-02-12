@@ -6,7 +6,7 @@
   --cell-min: 280px;
   --gap: 6px;
   --radius: 2px;
-  --font-mono: "SF Mono", "Cascadia Code", "Fira Code", ui-monospace, monospace;
+  --font-mono: "Anonymous Pro", ui-monospace, monospace;
 }
 
 @media (prefers-color-scheme: light) {
