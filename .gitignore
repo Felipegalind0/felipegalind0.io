@@ -28,6 +28,3 @@ priv/
 
 # python venv
 .venv/
-
-# polycam video/thumbnail assets (hosted on YouTube)
-public/polycam/
