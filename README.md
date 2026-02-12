@@ -274,6 +274,18 @@ If you're an AI assistant working on this codebase, here's a quick reference:
 
 ---
 
+## Version History
+
+| Version | Date       | Changes                                                        |
+|:--------|:-----------|:---------------------------------------------------------------|
+| v.2.0   | 2026-02-11 | Source link in footer, versioning, flattened repo structure     |
+| v.1.0   | 2026-02-11 | Anonymous Pro font (slashed zeros), comprehensive README       |
+| b.0.1   | 2026-02-10 | Initial build: bento grid, StatusCard, GithubStats, deployment |
+
+Version is defined in `src/config.ts` and rendered in the StatusCard footer alongside a link to the source repo.
+
+---
+
 ## License
 
 MIT
