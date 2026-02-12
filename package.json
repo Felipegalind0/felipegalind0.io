@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build && node scripts/inject-size.mjs",
     "preview": "astro preview",
+    "deploy": "npm run build && npx gh-pages -d dist --dotfiles",
     "astro": "astro"
   },
   "dependencies": {
