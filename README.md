@@ -346,3 +346,21 @@ Version is defined in `src/config.ts` and rendered in the StatusCard footer alon
 ## License
 
 MIT
+
+### Manual GitHub Pages redeploy
+
+If the GitHub Pages "pages build and deployment" workflow does not trigger after a deploy, you can force it by running:
+
+```bash
+npx gh-pages -d dist --dotfiles --no-history
+```
+
+This will force-push the latest build to the `gh-pages` branch and retrigger the GitHub Pages workflow. Make sure `.nojekyll` is present in `dist/` so the `_astro/` directory is not ignored.
+
+You can also use the shortcut:
+
+```bash
+npm run deploy
+```
+
+which runs the correct command with `--dotfiles` included.
