@@ -1,6 +1,6 @@
 # fg.io — bento grid personal dashboard
 
-A minimal, zero-JavaScript personal dashboard built with [Astro](https://astro.build). Pure CSS, system-theme-aware (light/dark), deployed as a static site to GitHub Pages.
+A minimal, zero-JavaScript personal dashboard built with [Astro](https://astro.build). Pure CSS (+ one YouTube iframe), system-theme-aware (light/dark), deployed as a static site to GitHub Pages.
 
 **Live:** [felipegalind0.io](https://felipegalind0.io)
 
@@ -13,7 +13,7 @@ A minimal, zero-JavaScript personal dashboard built with [Astro](https://astro.b
 
 ```
 ┌────────────────┬────────────────┬────────────────┬────────────────┐
-│  STATUS                         │  INPUT_STREAM  │  CORRUPT_DATA  │
+│  STATUS                         │  POLYCAM       │  CORRUPT_DATA  │
 │  [A]                            │  [B]           │  [D]           │
 │                                 ├────────────────┴────────────────┤
 │                                 │  GH_STATS                       │
@@ -28,7 +28,7 @@ A minimal, zero-JavaScript personal dashboard built with [Astro](https://astro.b
 
 ```
 ┌────────────────────┬────────────────────┐
-│  STATUS            │  INPUT_STREAM      │
+│  STATUS            │  POLYCAM           │
 │  [A]               │  [B]               │
 ├────────────────────┴────────────────────┤
 │  GH_STATS                               │
@@ -49,7 +49,7 @@ A minimal, zero-JavaScript personal dashboard built with [Astro](https://astro.b
 │  GH_STATS                              │
 │  [C]                                   │
 ├────────────────────────────────────────┤
-│  INPUT_STREAM                          │
+│  POLYCAM                               │
 │  [B]                                   │
 ├────────────────────────────────────────┤
 │  CORRUPT_DATA                          │
@@ -68,15 +68,22 @@ Source order: A → C → B → D → E
 ## Project Structure
 
 ```
-fg-io/
+fg.io/
 ├── public/
-│   └── CNAME                    # Custom domain for GitHub Pages
+│   ├── CNAME                    # Custom domain for GitHub Pages
+│   └── robots.txt               # Allow all bots
 ├── scripts/
-│   └── inject-size.mjs          # Post-build: logs page size in KB
+│   ├── inject-size.mjs          # Post-build: logs page size in KB
+│   ├── update-layout.py         # Generates ASCII layout diagrams for README
+│   ├── scrape-polycam.py        # Playwright scraper for Polycam profile
+│   └── upload-to-youtube.py     # Batch upload Polycam videos to YouTube
 ├── src/
 │   ├── components/
 │   │   ├── StatusCard.astro     # Widget [A]: bio, avatar, accomplishments
-│   │   └── GithubStats.astro    # Widget [C]: GitHub stats SVG image
+│   │   ├── GithubStats.astro    # Widget [C]: GitHub stats SVG image
+│   │   └── PolycamGallery.astro # Widget [B]: YouTube playlist embed (3D scans)
+│   ├── data/
+│   │   └── polycam.json         # Polycam capture manifest (IDs, names, YouTube IDs)
 │   ├── layouts/
 │   │   └── Layout.astro         # HTML shell, global reset, scanline overlay
 │   ├── pages/
@@ -84,6 +91,8 @@ fg-io/
 │   ├── styles/
 │   │   └── tokens.css           # CSS custom properties (design tokens)
 │   └── config.ts                # VERSION constant
+├── priv/                        # Private assets (gitignored)
+│   └── polycam/                 # Local Polycam video/thumbnail cache
 ├── astro.config.mjs             # Astro config (site URL)
 ├── package.json
 └── tsconfig.json
@@ -122,7 +131,7 @@ The bento grid uses CSS Grid with `auto-fit` + `minmax()` on mobile, switching t
 
 **Desktop grid mapping:**
 - **Cell A** (StatusCard): columns 1–3, rows 1–3
-- **Cell B** (INPUT_STREAM): column 3–4, row 1–2
+- **Cell B** (PolycamGallery): column 3–4, row 1–2
 - **Cell C** (GithubStats): columns 3–5, rows 2–3
 - **Cell D** (CORRUPT_DATA): column 4–5, row 1–2
 - **Cell E** (RECENT_COMMITS): columns 1–5, row 3–4
@@ -134,6 +143,12 @@ The bento grid uses CSS Grid with `auto-fit` + `minmax()` on mobile, switching t
 - Name, tagline, list of accomplishments
 - Version display from `src/config.ts`
 - All pure CSS, zero JS
+
+#### PolycamGallery (`src/components/PolycamGallery.astro`)
+- Embeds a YouTube playlist of [Polycam](https://poly.cam) 3D scan orbit videos
+- Single `<iframe>` — autoplay, muted, looping, no controls
+- Zero client-side JavaScript (YouTube player handles everything)
+- Playlist sourced from `priv/polycam/` videos uploaded via `scripts/upload-to-youtube.py`
 
 #### GithubStats (`src/components/GithubStats.astro`)
 - Uses [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) via a self-hosted Vercel app
@@ -219,7 +234,6 @@ npm run preview
 
 | Cell | Name            | Suggested purpose                   |
 |:-----|:----------------|:------------------------------------|
-| B    | INPUT_STREAM    | Blog feed, social links, interests  |
 | D    | CORRUPT_DATA    | Random/glitch art, fun data         |
 | E    | RECENT_COMMITS  | Latest GitHub activity feed         |
 
@@ -277,7 +291,7 @@ Since this is a static site (`dist/` is plain HTML/CSS), it works anywhere:
 
 - **Zero JavaScript** — the entire page is static HTML + CSS, no client-side JS
 - **System theme** — respects `prefers-color-scheme`, no manual toggle
-- **Tiny** — the entire page is ~6KB of HTML/CSS (excluding external font)
+- **Tiny** — the entire page is ~7KB of HTML/CSS (excluding external font + YouTube iframe)
 - **Monospace** — Anonymous Pro with slashed zeros everywhere
 - **Bento grid** — responsive CSS Grid, no layout frameworks
 - **Scanline overlay** — subtle CRT texture on desktop, disabled on mobile
@@ -305,7 +319,9 @@ If you're an AI assistant working on this codebase, here's a quick reference:
 - **Font** → Google Fonts `<link>` in `src/layouts/Layout.astro` `<head>`, font-family in tokens.css
 - **Grid placements** → `<style>` block in `src/pages/index.astro`
 - **Components** are `.astro` files: frontmatter in `---` fences, then HTML template, then `<style>` block
-- **No client-side JS** — everything renders at build time
+- **No client-side JS** — everything renders at build time (only YouTube iframe for Polycam gallery)
+- **Polycam gallery** → YouTube playlist iframe in `src/components/PolycamGallery.astro`, video IDs in `src/data/polycam.json`
+- **Polycam scripts** → `scripts/scrape-polycam.py` (Playwright scraper), `scripts/upload-to-youtube.py` (YouTube uploader). Run from `.venv` with deps in `priv/`
 - **GitHub stats** use an external Vercel-hosted SVG, not build-time API calls
 - **`<picture>` element** in `GithubStats.astro` handles light/dark via `<source media="(prefers-color-scheme: ...)">`
 - **`public/CNAME`** must exist for custom domain deploys (auto-copied to dist)
@@ -318,6 +334,7 @@ If you're an AI assistant working on this codebase, here's a quick reference:
 
 | Version | Date       | Changes                                                        |
 |:--------|:-----------|:---------------------------------------------------------------|
+| v.2.1   | 2026-02-11 | Polycam 3D scan gallery (YouTube playlist embed), zero JS      |
 | v.2.0   | 2026-02-11 | Source link in footer, versioning, flattened repo structure     |
 | v.1.0   | 2026-02-11 | Anonymous Pro font (slashed zeros), comprehensive README       |
 | b.0.1   | 2026-02-10 | Initial build: bento grid, StatusCard, GithubStats, deployment |
