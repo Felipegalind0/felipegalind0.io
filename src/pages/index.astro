@@ -50,6 +50,24 @@ import PolycamGallery from "../components/PolycamGallery.astro";
       grid-column: 4 / 5;
       grid-row: 1 / 2;
     }
+  }
+
+  /* portrait 4-col: expand polycam to 2 cols */
+  @media (min-width: 768px) and (max-aspect-ratio: 1/1) {
+    .cell-b {
+      grid-column: 3 / 5;
+      grid-row: 1 / 2;
+    }
+
+    .cell-d {
+      grid-column: 3 / 5;
+      grid-row: 3 / 4;
+    }
+
+    .cell-e {
+      grid-column: 1 / 5;
+      grid-row: 4 / 5;
+    }
 
     .cell-e {
       grid-column: 1 / 5;
@@ -75,6 +93,9 @@ import PolycamGallery from "../components/PolycamGallery.astro";
   }
 
   @media (min-width: 580px) {
+    .cell-b {
+      grid-column: span 2;
+    }
     .cell-c {
       grid-column: span 2;
     }
