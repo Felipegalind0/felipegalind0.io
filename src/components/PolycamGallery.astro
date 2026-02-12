@@ -1,68 +1,18 @@
----
-import captures from "../data/polycam.json";
----
-
 <div class="polycam-gallery">
   <div class="gallery-header">
     <span class="gallery-title">POLYCAM</span>
-    <span class="gallery-counter">
-      <span class="current-num">1</span>/<span class="total-num">{captures.length}</span>
-    </span>
   </div>
-
   <div class="gallery-viewport">
     <iframe
       class="gallery-frame"
-      src={`https://www.youtube.com/embed/${captures[0].youtubeId}?autoplay=1&mute=1&loop=1&playlist=${captures[0].youtubeId}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1`}
-      title={captures[0].name}
+      src="https://www.youtube.com/embed/Jk52AH-tjuM?si=uRGuyMm3trEpFYiR&autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&rel=0&playsinline=1"
+      title="Polycam 3D Scans"
       frameborder="0"
       allow="autoplay; encrypted-media"
       allowfullscreen
     ></iframe>
   </div>
-
-  <div class="gallery-label"><span class="capture-name">{captures[0].name}</span></div>
-
-  <div class="gallery-nav">
-    <button class="nav-btn prev" aria-label="Previous">&lt;</button>
-    <button class="nav-btn next" aria-label="Next">&gt;</button>
-  </div>
 </div>
-
-<script define:vars={{ captures }}>
-  const gallery = document.querySelector('.polycam-gallery');
-  const frame = gallery.querySelector('.gallery-frame');
-  const nameEl = gallery.querySelector('.capture-name');
-  const counterEl = gallery.querySelector('.current-num');
-  const prevBtn = gallery.querySelector('.prev');
-  const nextBtn = gallery.querySelector('.next');
-
-  let current = 0;
-  const total = captures.length;
-  const AUTOPLAY_MS = 12000;
-  let timer = null;
-
-  function show(index) {
-    current = ((index % total) + total) % total;
-    const c = captures[current];
-    const src = `https://www.youtube.com/embed/${c.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${c.youtubeId}&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
-    frame.src = src;
-    frame.title = c.name;
-    nameEl.textContent = c.name;
-    counterEl.textContent = current + 1;
-    resetTimer();
-  }
-
-  function resetTimer() {
-    if (timer) clearInterval(timer);
-    timer = setInterval(() => show(current + 1), AUTOPLAY_MS);
-  }
-
-  prevBtn.addEventListener('click', () => show(current - 1));
-  nextBtn.addEventListener('click', () => show(current + 1));
-
-  resetTimer();
-</script>
 
 <style>
   .polycam-gallery {
@@ -73,9 +23,6 @@ import captures from "../data/polycam.json";
   }
 
   .gallery-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 0 0.25rem;
   }
 
@@ -83,11 +30,6 @@ import captures from "../data/polycam.json";
     font-size: clamp(0.7rem, 1.2vw, 0.85rem);
     font-weight: 700;
     opacity: 0.6;
-  }
-
-  .gallery-counter {
-    font-size: 0.7rem;
-    opacity: 0.4;
   }
 
   .gallery-viewport {
@@ -105,36 +47,5 @@ import captures from "../data/polycam.json";
     width: 100%;
     height: 100%;
     border: none;
-  }
-
-  .gallery-label {
-    padding: 0 0.25rem;
-    font-size: clamp(0.65rem, 1vw, 0.75rem);
-    opacity: 0.5;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .gallery-nav {
-    display: flex;
-    gap: 0.25rem;
-  }
-
-  .nav-btn {
-    flex: 1;
-    background: rgba(128, 128, 128, 0.08);
-    border: 1px solid var(--fg-dim);
-    color: var(--fg);
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    padding: 0.3rem;
-    cursor: pointer;
-    border-radius: var(--radius);
-    transition: background 0.15s;
-  }
-
-  .nav-btn:hover {
-    background: rgba(128, 128, 128, 0.2);
   }
 </style>
