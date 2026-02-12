@@ -1,12 +1,17 @@
 <div class="polycam-gallery">
   <iframe
     class="gallery-frame"
-    src="https://www.youtube.com/embed/videoseries?list=PLL9sMwxqcFqH13Ybm4jV-KM-yy0Tpg_N3&autoplay=1&mute=1&loop=1&modestbranding=1&rel=0&playsinline=1"
+    id="polycam-player"
     title="Polycam 3D Scans"
     frameborder="0"
     allow="autoplay; encrypted-media"
-    allowfullscreen
+    loading="lazy"
   ></iframe>
+  <script>
+    const base = 'https://www.youtube.com/embed/videoseries?list=PLL9sMwxqcFqH13Ybm4jV-KM-yy0Tpg_N3&autoplay=1&mute=1&loop=1&modestbranding=1&rel=0&playsinline=1';
+    const isDesktop = matchMedia('(hover:hover) and (pointer:fine)').matches;
+    document.getElementById('polycam-player').src = isDesktop ? base + '&controls=0' : base;
+  </script>
   <a class="polycam-link" href="https://poly.cam/@Felipegalind0">poly.cam/@Felipegalind0</a>
 </div>
 
