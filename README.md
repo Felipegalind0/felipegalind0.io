@@ -17,15 +17,15 @@ Breakpoints: 1 column <580px, 2 columns 580px+, 3 columns 900px+, 4 columns 1200
 
 ```
 ┌────────────────┬────────────────┬────────────────┬────────────────┐
-│  Felipe_Galind0_w               │  yt_playlist_w                │
-│  [A]                            │  [B]                          │
-├────────────────┬────────────────┼────────────────┼────────────────┤
-│                │                │  gh_stats_w    │  blog_w        │
-│                │                │  [C]           │  [D]           │
-├────────────────┴────────────────┴────────────────┴────────────────┤
-│  footer_w                                                           │
-│  [E]                                                                │
-└──────────────────────────────────────────────────────────────────────┘
+│ Felipe_G.  │  yt_playlist_w                                   │
+│ [A]        │  [B]                                             │
+├────────────┼────────────────┼────────────────┬────────────────┤
+│            │ gh_stats_w     │ blog_w                          │
+│            │ [C]            │ [D]                             │
+├────────────┴────────────────┴────────────────┴────────────────┤
+│  footer_w                                                      │
+│  [E]                                                           │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 **3 columns** (wide, 900px+)
@@ -149,10 +149,10 @@ All theming is driven by CSS custom properties. Dark mode is the default; light 
 The bento grid is 1 column by default, then switches 2 2 columns at 580px+, 3 columns at 900px+, and 4 columns at 1200px+.
 
 **4-column grid mapping (1200px+):**
-- **Cell A** (Felipe_Galind0_w / StatusCard): columns 1–2, rows 1–2
-- **Cell B** (yt_playlist_w / PolycamGallery): columns 3–4, row 1
-- **Cell C** (gh_stats_w / GithubStats): column 3, row 2
-- **Cell D** (blog_w): column 4, row 2
+- **Cell A** (Felipe_Galind0_w / StatusCard): column 1, rows 1–2
+- **Cell B** (yt_playlist_w / PolycamGallery): columns 2–4, row 1
+- **Cell C** (gh_stats_w / GithubStats): column 2, row 2
+- **Cell D** (blog_w): columns 3–4, row 2
 - **Cell E** (footer_w): columns 1–4, row 3
 
 **3-column grid mapping (900px+):**
