@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Reads grid placements from src/pages/index.astro and HTML source order,
-then generates ASCII layout diagrams for 4-col, 2-col, and 1-col views
+then generates ASCII layout diagrams for 4-col, 3-col, 2-col, and 1-col views
 and injects them into README.md between <!-- LAYOUT:START --> and <!-- LAYOUT:END -->.
 
 Usage: python scripts/update-layout.py
@@ -16,17 +16,17 @@ README = ROOT / "README.md"
 
 # --- Cell labels (short names shown in diagrams) ---
 LABELS = {
-    "a": "STATUS",
-    "b": "INPUT_STREAM",
-    "c": "GH_STATS",
-    "d": "CORRUPT_DATA",
-    "e": "RECENT_COMMITS",
+    "a": "Felipe_Galind0_w",
+    "b": "yt_playlist_w",
+    "c": "gh_stats_w",
+    "d": "blog_w",
+    "e": "footer_w",
 }
 
 # --- Parse grid placements from index.astro ---
 
 def parse_placements(src: str) -> dict:
-    """Extract grid-column and grid-row for each cell from the 768px+ media query."""
+    """Extract grid-column and grid-row for each cell from a CSS block."""
     placements = {}
     # Find cell classes and their grid-column / grid-row inside the 768px block
     cell_blocks = re.findall(
@@ -41,6 +41,26 @@ def parse_placements(src: str) -> dict:
                 "row": (int(row.group(1)), int(row.group(2))),
             }
     return placements
+
+
+def extract_media_block(src: str, min_width: int) -> str:
+    """Return the CSS inside a @media (min-width: Xpx) block."""
+    token = f"@media (min-width: {min_width}px)"
+    start = src.find(token)
+    if start == -1:
+        return ""
+    brace_start = src.find("{", start)
+    if brace_start == -1:
+        return ""
+    depth = 0
+    for i in range(brace_start, len(src)):
+        if src[i] == "{":
+            depth += 1
+        elif src[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return src[brace_start + 1 : i]
+    return ""
 
 
 def parse_source_order(src: str) -> list:
@@ -221,8 +241,10 @@ def render_grid(grid: list[list[str]], col_width: int = 18) -> str:
     return "\n".join(lines)
 
 
-def build_4col(placements: dict) -> str:
-    """Build 4-column desktop layout from parsed placements."""
+def build_grid(placements: dict) -> str:
+    """Build a grid from parsed placements."""
+    if not placements:
+        return ""
     max_row = max(p["row"][1] for p in placements.values())
     max_col = max(p["col"][1] for p in placements.values())
     rows = max_row - 1
@@ -235,23 +257,6 @@ def build_4col(placements: dict) -> str:
                 grid[r][c] = letter
 
     return render_grid(grid, col_width=16)
-
-
-def build_2col(source_order: list) -> str:
-    """Build 2-column tablet layout. C spans 2 cols, others fill L-R."""
-    grid = []
-    queue = [c for c in source_order if c != "c"]
-    for cell in source_order:
-        if cell == "c":
-            grid.append(["c", "c"])
-        elif queue:
-            row = [queue.pop(0)]
-            if queue:
-                row.append(queue.pop(0))
-            else:
-                row.append(row[0])  # span
-            grid.append(row)
-    return render_grid(grid, col_width=20)
 
 
 def build_1col(source_order: list) -> str:
@@ -279,20 +284,36 @@ def inject_layout(readme: str, layout_block: str) -> str:
 
 def main():
     src = INDEX.read_text()
-    placements = parse_placements(src)
     source_order = parse_source_order(src)
 
-    print(f"Placements: {placements}")
+    block_580 = extract_media_block(src, 580) or src
+    block_900 = extract_media_block(src, 900) or src
+    block_1200 = extract_media_block(src, 1200) or src
+
+    placements_580 = parse_placements(block_580)
+    placements_900 = parse_placements(block_900)
+    placements_1200 = parse_placements(block_1200)
+
+    print(f"Placements 580: {placements_580}")
+    print(f"Placements 900: {placements_900}")
+    print(f"Placements 1200: {placements_1200}")
     print(f"Source order: {source_order}")
 
-    d4 = build_4col(placements)
-    d2 = build_2col(source_order)
+    d4 = build_grid(placements_1200)
+    d3 = build_grid(placements_900)
+    d2 = build_grid(placements_580)
     d1 = build_1col(source_order)
 
-    block = f"""**4 columns** (desktop, 768px+)
+    block = f"""**4 columns** (desktop, 1200px+)
 
 ```
 {d4}
+```
+
+**3 columns** (wide, 900px+)
+
+```
+{d3}
 ```
 
 **2 columns** (tablet, 580px+)
